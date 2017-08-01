@@ -15,19 +15,22 @@ import java.util.Random;
  */
 public class Driver {
     public static void main(String[] args) {
-        SparkConf conf = new SparkConf()
-                .setMaster("local[4]")
-                .setAppName("Simple Application");
+//        SparkConf conf = new SparkConf()
+//                .setMaster("local[4]")
+//                .setAppName("Simple Application");
 //        SparkConf conf = new SparkConf()
 //                .setMaster("spark://10.211.55.101:7077")
 //                .setAppName("Simple Application");
+        SparkConf conf = new SparkConf()
+                .setMaster("spark://192.168.0.171:7077")
+                .setAppName("Simple Application");
 
         JavaSparkContext sc = new JavaSparkContext(conf);
-//        sc.addJar("target/SparkTraining-1.0-SNAPSHOT.jar");
+        sc.addJar("target/SparkTraining-1.0-SNAPSHOT.jar");
 
         ArrayList<Integer> randomArray = new ArrayList<>();
         Random random = new Random();
-        for (int i = 0; i < 1000000; i++) {
+        for (int i = 0; i < 10; i++) {
             randomArray.add(random.nextInt());
         }
 
