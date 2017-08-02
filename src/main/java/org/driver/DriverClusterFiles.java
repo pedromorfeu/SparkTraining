@@ -1,11 +1,9 @@
 package org.driver;
 
 import org.apache.spark.SparkConf;
-import org.apache.spark.api.java.JavaPairRDD;
 import org.apache.spark.api.java.JavaRDD;
 import org.apache.spark.api.java.JavaSparkContext;
-import org.driver.function.MyExecutor;
-import scala.Tuple2;
+import org.driver.function.ClusterExecutor;
 
 import java.util.Arrays;
 import java.util.List;
@@ -35,9 +33,9 @@ public class DriverClusterFiles {
 //                .reduceByKey((a, b) -> a + b);
 //        System.out.println(reducedRDD.take(10));
 
-        JavaRDD<String> rdd = sc.parallelize(Arrays.asList("one", "two"), 2);
+        JavaRDD<String> rdd = sc.parallelize(Arrays.asList("one", "two"));
 //        rdd = rdd.repartition(2);
-        List<String> collect = rdd.map(new MyExecutor()).collect();
+        List<String> collect = rdd.map(new ClusterExecutor()).collect();
         System.out.println(collect);
     }
 }
