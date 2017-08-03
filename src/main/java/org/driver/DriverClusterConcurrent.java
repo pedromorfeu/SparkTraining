@@ -27,24 +27,34 @@ public class DriverClusterConcurrent {
         System.out.println(list.count());
 
         new Thread(() -> {
+            System.out.println("Start 1");
+            try {Thread.sleep(10000);} catch (InterruptedException e) {e.printStackTrace();}
             JavaRDD<Integer> list1 = sc.parallelize(Arrays.asList(1, 2, 3));
-            System.out.println(list1.count());
+            System.out.println("1: " + list1.count());
         }).start();
         new Thread(() -> {
+            System.out.println("Start 2");
+            try {Thread.sleep(5000);} catch (InterruptedException e) {e.printStackTrace();}
             JavaRDD<Integer> list1 = sc.parallelize(Arrays.asList(1, 2, 3, 4));
-            System.out.println(list1.count());
+            System.out.println("2: " + list1.count());
         }).start();
         new Thread(() -> {
+            System.out.println("Start 3");
+            try {Thread.sleep(1000);} catch (InterruptedException e) {e.printStackTrace();}
             JavaRDD<Integer> list1 = sc.parallelize(Arrays.asList(1, 2, 3, 4, 5));
-            System.out.println(list1.count());
+            System.out.println("3: " + list1.count());
         }).start();
         new Thread(() -> {
+            System.out.println("Start 4");
+            try {Thread.sleep(3000);} catch (InterruptedException e) {e.printStackTrace();}
             JavaRDD<Integer> list1 = sc.parallelize(Arrays.asList(1, 2, 3, 4, 5, 6));
-            System.out.println(list1.count());
+            System.out.println("4: " + list1.count());
         }).start();
         new Thread(() -> {
+            System.out.println("Start 5");
+            try {Thread.sleep(2000);} catch (InterruptedException e) {e.printStackTrace();}
             JavaRDD<Integer> list1 = sc.parallelize(Arrays.asList(1, 2, 3, 4, 5, 6, 7));
-            System.out.println(list1.count());
+            System.out.println("5: " + list1.count());
         }).start();
     }
 }
