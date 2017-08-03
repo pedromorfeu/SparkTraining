@@ -1,9 +1,12 @@
 package org.driver;
 
 import org.apache.spark.SparkConf;
+import org.apache.spark.SparkEnv;
+import org.apache.spark.TaskContext;
 import org.apache.spark.api.java.JavaRDD;
 import org.apache.spark.api.java.JavaSparkContext;
 
+import java.net.InetAddress;
 import java.util.Arrays;
 
 /**
@@ -27,34 +30,55 @@ public class DriverClusterConcurrent {
         System.out.println(list.count());
 
         new Thread(() -> {
-            System.out.println("Start 1");
-            try {Thread.sleep(10000);} catch (InterruptedException e) {e.printStackTrace();}
-            JavaRDD<Integer> list1 = sc.parallelize(Arrays.asList(1, 2, 3));
-            System.out.println("1: " + list1.count());
+            try {
+                System.out.println("Start 1 " + "" );
+                Thread.sleep(10000);
+
+                JavaRDD<Integer> list1 = sc.parallelize(Arrays.asList(1, 2, 3));
+                System.out.println("1: " + list1.count() + "");
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }).start();
         new Thread(() -> {
-            System.out.println("Start 2");
-            try {Thread.sleep(5000);} catch (InterruptedException e) {e.printStackTrace();}
-            JavaRDD<Integer> list1 = sc.parallelize(Arrays.asList(1, 2, 3, 4));
-            System.out.println("2: " + list1.count());
+            try {
+                System.out.println("Start 2 " + "");
+                Thread.sleep(5000);
+                JavaRDD<Integer> list1 = sc.parallelize(Arrays.asList(1, 2, 3, 4));
+                System.out.println("2: " + list1.count() + "");
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }).start();
         new Thread(() -> {
-            System.out.println("Start 3");
-            try {Thread.sleep(1000);} catch (InterruptedException e) {e.printStackTrace();}
-            JavaRDD<Integer> list1 = sc.parallelize(Arrays.asList(1, 2, 3, 4, 5));
-            System.out.println("3: " + list1.count());
+            try {
+                System.out.println("Start 3 " + "");
+                Thread.sleep(1000);
+                JavaRDD<Integer> list1 = sc.parallelize(Arrays.asList(1, 2, 3, 4, 5));
+                System.out.println("3: " + list1.count() + "");
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }).start();
         new Thread(() -> {
-            System.out.println("Start 4");
-            try {Thread.sleep(3000);} catch (InterruptedException e) {e.printStackTrace();}
-            JavaRDD<Integer> list1 = sc.parallelize(Arrays.asList(1, 2, 3, 4, 5, 6));
-            System.out.println("4: " + list1.count());
+            try {
+                System.out.println("Start 4 " + "");
+                Thread.sleep(3000);
+                JavaRDD<Integer> list1 = sc.parallelize(Arrays.asList(1, 2, 3, 4, 5, 6));
+                System.out.println("4: " + list1.count() + "");
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }).start();
         new Thread(() -> {
-            System.out.println("Start 5");
-            try {Thread.sleep(2000);} catch (InterruptedException e) {e.printStackTrace();}
-            JavaRDD<Integer> list1 = sc.parallelize(Arrays.asList(1, 2, 3, 4, 5, 6, 7));
-            System.out.println("5: " + list1.count());
+            try {
+                System.out.println("Start 5 " + "");
+                Thread.sleep(2000);
+                JavaRDD<Integer> list1 = sc.parallelize(Arrays.asList(1, 2, 3, 4, 5, 6, 7));
+                System.out.println("5: " + list1.count() + "");
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }).start();
     }
 }
