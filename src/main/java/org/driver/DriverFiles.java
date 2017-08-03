@@ -14,20 +14,27 @@ import java.util.List;
 public class DriverFiles {
 
     public static void main(String[] args) {
+//        String master = "local[8]";
+        String master = "spark://10.211.55.101:7077";
         SparkConf conf = new SparkConf()
-                .setMaster("local[8]")
-                .set("spark.driver.memory", "512m")
-                .set("spark.worker.memory", "512m")
-                .set("spark.executor.memory", "512m")
-                .set("spark.task.cpus", "4")
+                .setMaster(master)
+//                .set("spark.driver.memory", "512m")
+//                .set("spark.worker.memory", "512m")
+//                .set("spark.executor.memory", "512m")
+                .set("spark.task.cpus", "2")
                 .setAppName("Simple Application");
 
         JavaSparkContext sc = new JavaSparkContext(conf);
+        sc.addJar("target/SparkTraining-1.0-SNAPSHOT.jar");
 
-        JavaRDD<String> rdd = sc.parallelize(Arrays.asList("three", "four"));
+        JavaRDD<String> rdd = sc.parallelize(
+                Arrays.asList(
+                        "/vagrant/raspberry/Notes.txt",
+                        "/vagrant/raspberry/run-hadoop.sh",
+                        "/vagrant/raspberry/run-yarn.sh"), 3);
         List<String[]> collect = rdd.map(new Executor()).collect();
         for (String[] list : collect) {
-            for(int i=0;i<list.length;i++){
+            for (int i = 0; i < list.length; i++) {
                 System.out.println(list[i]);
             }
         }

@@ -14,17 +14,7 @@ public class ClusterExecutor implements Function<String, String> {
 
     @Override
     public String call(String s) throws Exception {
-        String path = null;
-        switch (s) {
-            case "one":
-                path = "/home/pi/raspberry/Notes.txt";
-                break;
-            case "two":
-                path = "/home/pi/raspberry/format-hadoop.sh";
-                break;
-        }
-
-        List<String> lines = Files.readAllLines(Paths.get(path));
+        List<String> lines = Files.readAllLines(Paths.get(s));
         s = "hi " + s + " " + InetAddress.getLocalHost() + " text: " + lines.get(0);
         return s;
     }

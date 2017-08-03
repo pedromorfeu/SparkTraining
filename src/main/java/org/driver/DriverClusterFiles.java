@@ -14,14 +14,14 @@ import java.util.List;
 public class DriverClusterFiles {
 
     public static void main(String[] args) {
+//        String master = "spark://192.168.0.171:7077";
+        String master = "spark://10.211.55.101:7077";
         SparkConf conf = new SparkConf()
-                .setMaster("spark://192.168.0.171:7077")
-                .set("spark.driver.memory", "512m")
-                .set("spark.worker.memory", "512m")
-                .set("spark.executor.memory", "512m")
-//                .set("spark.executor.cores", "4")
-                .set("spark.task.cpus", "4")
-//                .set("spark.executor.instances", "2")
+                .setMaster(master)
+//                .set("spark.driver.memory", "512m")
+//                .set("spark.worker.memory", "512m")
+//                .set("spark.executor.memory", "512m")
+                .set("spark.task.cpus", "2")
                 .setAppName("Simple Application");
 
         JavaSparkContext sc = new JavaSparkContext(conf);
@@ -33,7 +33,7 @@ public class DriverClusterFiles {
 //                .reduceByKey((a, b) -> a + b);
 //        System.out.println(reducedRDD.take(10));
 
-        JavaRDD<String> rdd = sc.parallelize(Arrays.asList("one", "two"));
+        JavaRDD<String> rdd = sc.parallelize(Arrays.asList("/home/pi/raspberry/Notes.txt", "/home/pi/raspberry/run-hadoop.sh"));
 //        rdd = rdd.repartition(2);
         List<String> collect = rdd.map(new ClusterExecutor()).collect();
         System.out.println(collect);

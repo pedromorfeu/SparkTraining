@@ -14,11 +14,13 @@ import java.util.Random;
  */
 public class DriverCluster {
     public static void main(String[] args) {
+//        String master = "spark://192.168.0.171:7077";
+        String master = "spark://10.211.55.101:7077";
         SparkConf conf = new SparkConf()
-                .setMaster("spark://192.168.0.171:7077")
-                .set("spark.driver.memory", "512m")
-                .set("spark.worker.memory", "512m")
-                .set("spark.executor.memory", "512m")
+                .setMaster(master)
+//                .set("spark.driver.memory", "512m")
+//                .set("spark.worker.memory", "512m")
+//                .set("spark.executor.memory", "512m")
                 .setAppName("Simple Application");
 
         JavaSparkContext sc = new JavaSparkContext(conf);
