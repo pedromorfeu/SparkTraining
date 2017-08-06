@@ -1,13 +1,17 @@
 package org.driver;
 
 import org.apache.spark.SparkConf;
-import org.apache.spark.SparkEnv;
 import org.apache.spark.TaskContext;
 import org.apache.spark.api.java.JavaRDD;
 import org.apache.spark.api.java.JavaSparkContext;
 
+import java.io.IOException;
 import java.net.InetAddress;
+import java.net.UnknownHostException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.Arrays;
+import java.util.stream.Collectors;
 
 /**
  * Created by pedromorfeu on 18/06/2017.
@@ -21,6 +25,7 @@ public class DriverClusterConcurrent {
 //                .set("spark.driver.memory", "512m")
 //                .set("spark.worker.memory", "512m")
 //                .set("spark.executor.memory", "512m")
+//                .set("spark.task.cpus", "2")
                 .setAppName("Simple Application");
 
         JavaSparkContext sc = new JavaSparkContext(conf);
@@ -31,54 +36,53 @@ public class DriverClusterConcurrent {
 
         new Thread(() -> {
             try {
-                System.out.println("Start 1 " + "" );
-                Thread.sleep(10000);
-
-                JavaRDD<Integer> list1 = sc.parallelize(Arrays.asList(1, 2, 3));
-                System.out.println("1: " + list1.count() + "");
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }).start();
-        new Thread(() -> {
-            try {
-                System.out.println("Start 2 " + "");
-                Thread.sleep(5000);
-                JavaRDD<Integer> list1 = sc.parallelize(Arrays.asList(1, 2, 3, 4));
-                System.out.println("2: " + list1.count() + "");
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }).start();
-        new Thread(() -> {
-            try {
-                System.out.println("Start 3 " + "");
                 Thread.sleep(1000);
-                JavaRDD<Integer> list1 = sc.parallelize(Arrays.asList(1, 2, 3, 4, 5));
-                System.out.println("3: " + list1.count() + "");
+                JavaRDD<String> list1 = sc.parallelize(Arrays.asList(1, 2, 3)).map(integer -> 1 + ": " + InetAddress.getLocalHost().getHostAddress());
+                System.out.println(list1.collect());
             } catch (Exception e) {
                 e.printStackTrace();
             }
         }).start();
         new Thread(() -> {
             try {
-                System.out.println("Start 4 " + "");
-                Thread.sleep(3000);
-                JavaRDD<Integer> list1 = sc.parallelize(Arrays.asList(1, 2, 3, 4, 5, 6));
-                System.out.println("4: " + list1.count() + "");
+                Thread.sleep(1000);
+                JavaRDD<String> list1 = sc.parallelize(Arrays.asList(1, 2, 3, 4)).map(integer -> 2 + ": " + InetAddress.getLocalHost().getHostAddress());
+                System.out.println(list1.collect());
             } catch (Exception e) {
                 e.printStackTrace();
             }
         }).start();
         new Thread(() -> {
             try {
-                System.out.println("Start 5 " + "");
-                Thread.sleep(2000);
-                JavaRDD<Integer> list1 = sc.parallelize(Arrays.asList(1, 2, 3, 4, 5, 6, 7));
-                System.out.println("5: " + list1.count() + "");
+                Thread.sleep(1000);
+                JavaRDD<String> list1 = sc.parallelize(Arrays.asList(1, 2, 3, 4, 5)).map(integer -> 3 + ": " + InetAddress.getLocalHost().getHostAddress());
+                System.out.println(list1.collect());
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }).start();
+        new Thread(() -> {
+            try {
+                Thread.sleep(1000);
+                JavaRDD<String> list1 = sc.parallelize(Arrays.asList(1, 2, 3, 4, 5, 6)).map(integer -> 4 + ": " + InetAddress.getLocalHost().getHostAddress());
+                System.out.println(list1.collect());
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }).start();
+        new Thread(() -> {
+            try {
+                Thread.sleep(1000);
+                JavaRDD<String> list1 = sc.parallelize(Arrays.asList(1, 2, 3, 4, 5, 6, 7)).map(integer -> 5 + ": " + InetAddress.getLocalHost().getHostAddress());
+                System.out.println(list1.collect());
             } catch (Exception e) {
                 e.printStackTrace();
             }
         }).start();
     }
+
+    private static void printResult(JavaRDD<Integer> list1, int i) throws IOException {
+        System.out.println(i + ": " + list1.count() + Files.list(Paths.get("/")).map(path -> path.toFile().getName()).collect(Collectors.toList()));
+    }
+
 }
