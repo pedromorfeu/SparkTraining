@@ -1,7 +1,9 @@
 package org.sparktraining.kryo;
 
 import com.esotericsoftware.kryo.Kryo;
+import com.esotericsoftware.kryo.io.Input;
 import com.esotericsoftware.kryo.io.InputChunked;
+import com.esotericsoftware.kryo.io.Output;
 import com.esotericsoftware.kryo.io.OutputChunked;
 
 import java.io.FileInputStream;
@@ -14,11 +16,11 @@ import java.util.stream.Collectors;
 /**
  * Created by pedromorfeu on 27/08/2017.
  */
-public class KryoMain {
+public class KryoSimpleMain {
 
     public static final int NUM_ENTRIES = 100000;
     public static final int NUM_FILES = 2000;
-    public static final String FOLDER = "target/kryo/";
+    public static final String FOLDER = "target/kryo-simple";
 
     public static void main(String[] args) throws IOException {
 
@@ -26,11 +28,10 @@ public class KryoMain {
             prepareFolder(FOLDER);
             Kryo kryoWrite = new Kryo();
             for (int j = 0; j < NUM_FILES; j++) {
-                OutputChunked output = new OutputChunked(new FileOutputStream(FOLDER + "/file" + j + ".bin"), 1024);
+                Output output = new Output(new FileOutputStream(FOLDER + "/file" + j + ".bin"));
                 for (int i = 0; i < NUM_ENTRIES; i++) {
                     Trip trip = new Trip(i % 100, 2, 3);
                     kryoWrite.writeObject(output, trip);
-                    output.endChunks();
                 }
                 output.close();
             }
@@ -39,12 +40,11 @@ public class KryoMain {
         long start = System.currentTimeMillis();
         long total = 0;
         for (int j = 0; j < NUM_FILES; j++) {
-            InputChunked input = new InputChunked(new FileInputStream(FOLDER + "/file" + j + ".bin"), 1024);
+            Input input = new Input(new FileInputStream(FOLDER + "/file" + j + ".bin"));
             Kryo kryoRead = new Kryo();
             for (int i = 0; i < NUM_ENTRIES; i++) {
                 Trip tripRead = kryoRead.readObject(input, Trip.class);
                 total += tripRead.getDay();
-                input.nextChunks();
             }
             input.close();
         }
@@ -65,6 +65,5 @@ public class KryoMain {
             }
             return path;
         }).collect(Collectors.toList());
-        Files.createDirectory(Paths.get(folderPath));
     }
 }
