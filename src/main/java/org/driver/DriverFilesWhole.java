@@ -30,7 +30,9 @@ public class DriverFilesWhole {
 
         long start = System.currentTimeMillis();
 
-        JavaRDD<String> stringJavaRDD = sc.textFile("file:///spark_input_files/books/pg26404_new.txt");
+        // I think there won't be copying the file through the network
+        // If that was true, then using an unexisting node file would work, because it would be copied from the driver
+        JavaRDD<String> stringJavaRDD = sc.textFile("/spark_input_files/books/pg26404_new.txt");
         System.out.println(stringJavaRDD.count());
         JavaRDD<String> mappedRDD = stringJavaRDD
                 .map(v1 -> {
@@ -41,7 +43,7 @@ public class DriverFilesWhole {
             System.out.println(s);
         }
 
-        JavaPairRDD<String, String> rdd = sc.wholeTextFiles("file:///spark_input_files/books/50430-0.txt");
+        JavaPairRDD<String, String> rdd = sc.wholeTextFiles("/spark_input_files/books/50430-0.txt");
 //        System.out.println(rdd.count());
 
         System.out.println("Took " + (System.currentTimeMillis() - start));

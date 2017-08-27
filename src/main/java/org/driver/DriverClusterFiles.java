@@ -20,8 +20,9 @@ public class DriverClusterFiles {
                 .setMaster(master)
 //                .set("spark.driver.memory", "512m")
 //                .set("spark.worker.memory", "512m")
-//                .set("spark.executor.memory", "512m")
-                .set("spark.task.cpus", "2")
+                .set("spark.executor.memory", "1g")
+//                .set("spark.task.cpus", "2")
+                .set("spark.cores.max", "3")
                 .setAppName("Simple Application");
 
         JavaSparkContext sc = new JavaSparkContext(conf);
@@ -33,7 +34,10 @@ public class DriverClusterFiles {
 //                .reduceByKey((a, b) -> a + b);
 //        System.out.println(reducedRDD.take(10));
 
-        JavaRDD<String> rdd = sc.parallelize(Arrays.asList("/home/pi/raspberry/Notes.txt", "/home/pi/raspberry/run-hadoop.sh"));
+        JavaRDD<String> rdd = sc.parallelize(Arrays.asList(
+                "//vagrant/raspberry/Notes.txt",
+                "/vagrant/raspberry/run-hadoop.sh",
+                "/vagrant/raspberry/run-hadoop.sh"));
 //        rdd = rdd.repartition(2);
         List<String> collect = rdd.map(new ClusterExecutor()).collect();
         System.out.println(collect);

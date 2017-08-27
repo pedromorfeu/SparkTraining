@@ -21,10 +21,18 @@
     </build>
 
     <dependencies>
-        <dependency> <!-- Spark dependency -->
+        <!-- Spark dependency -->
+        <dependency>
             <groupId>org.apache.spark</groupId>
             <artifactId>spark-core_2.10</artifactId>
             <version>1.6.2</version>
+        </dependency>
+
+        <!--Kryo serializer-->
+        <dependency>
+            <groupId>com.esotericsoftware</groupId>
+            <artifactId>kryo</artifactId>
+            <version>4.0.1</version>
         </dependency>
     </dependencies>
 </project>
