@@ -55,9 +55,9 @@ public class JavaBinaryReadWrite {
                 }
             }
         }
-        System.out.println(total);
-        System.out.println("totalSeen: " + totalSeen);
-        System.out.println("Took " + (System.currentTimeMillis() - start));
+        System.out.println("total: " + total);
+        System.out.println("total seen: " + totalSeen);
+        System.out.println("took " + (System.currentTimeMillis() - start));
 
     }
 
