@@ -6,6 +6,8 @@ import com.esotericsoftware.kryo.io.InputChunked;
 import com.esotericsoftware.kryo.io.Output;
 import com.esotericsoftware.kryo.io.OutputChunked;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -24,13 +26,19 @@ public class KryoSimpleMain {
 
     public static void main(String[] args) throws IOException {
 
-        if(false) {
+//        System.out.println("Sleeping...");
+//        System.in.read();
+//        System.out.println("Start!");
+
+        if(true) {
             prepareFolder(FOLDER);
             Kryo kryoWrite = new Kryo();
+            kryoWrite.register(Trip.class);
+            kryoWrite.setReferences(false);
             for (int j = 0; j < NUM_FILES; j++) {
-                Output output = new Output(new FileOutputStream(FOLDER + "/file" + j + ".bin"));
+                Output output = new Output(new BufferedOutputStream(new FileOutputStream(FOLDER + "/file" + j + ".bin")));
                 for (int i = 0; i < NUM_ENTRIES; i++) {
-                    Trip trip = new Trip(i % 100, 2, 3);
+                    Trip trip = new Trip(i % 100, 5, 128 + (i % 100));
                     kryoWrite.writeObject(output, trip);
                 }
                 output.close();
@@ -39,16 +47,23 @@ public class KryoSimpleMain {
 
         long start = System.currentTimeMillis();
         long total = 0;
+        long totalSeen = 0;
+        Kryo kryoRead = new Kryo();
+        kryoRead.register(Trip.class);
+        kryoRead.setReferences(false);
         for (int j = 0; j < NUM_FILES; j++) {
-            Input input = new Input(new FileInputStream(FOLDER + "/file" + j + ".bin"));
-            Kryo kryoRead = new Kryo();
+            Input input = new Input(new BufferedInputStream(new FileInputStream(FOLDER + "/file" + j + ".bin")), 1024);
             for (int i = 0; i < NUM_ENTRIES; i++) {
                 Trip tripRead = kryoRead.readObject(input, Trip.class);
-                total += tripRead.getDay();
+                if (tripRead.getDay() > 30 && tripRead.getDay() < 80) {
+                    total += tripRead.getDay();
+                }
+                totalSeen++;
             }
             input.close();
         }
         System.out.println("total: " + total);
+        System.out.println("total seen: " + totalSeen);
         System.out.println("took " + (System.currentTimeMillis() - start));
     }
 

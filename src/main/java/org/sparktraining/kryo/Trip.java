@@ -1,5 +1,12 @@
 package org.sparktraining.kryo;
 
+import com.esotericsoftware.kryo.Kryo;
+import com.esotericsoftware.kryo.KryoSerializable;
+import com.esotericsoftware.kryo.Serializer;
+import com.esotericsoftware.kryo.io.Input;
+import com.esotericsoftware.kryo.io.Output;
+import com.esotericsoftware.kryo.serializers.DefaultSerializers;
+
 /**
  * Created by pedromorfeu on 27/08/2017.
  */
@@ -50,4 +57,5 @@ public class Trip {
                 ", city=" + city +
                 '}';
     }
+
 }
