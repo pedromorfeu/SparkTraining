@@ -30,7 +30,7 @@ public class KryoSimpleMain {
 //        System.in.read();
 //        System.out.println("Start!");
 
-        if(true) {
+        if(false) {
             prepareFolder(FOLDER);
             Kryo kryoWrite = new Kryo();
             kryoWrite.register(Trip.class);
