@@ -19,8 +19,8 @@ import java.util.List;
 public class DriverFilesWhole {
 
     public static void main(String[] args) {
-//        String master = "local[8]";
-        String master = "spark://10.211.55.101:7077";
+        String master = "local[*]";
+//        String master = "spark://10.211.55.101:7077";
         SparkConf conf = new SparkConf()
                 .setMaster(master)
                 .setAppName("Simple Application");
@@ -38,13 +38,17 @@ public class DriverFilesWhole {
                 .map(v1 -> {
                     return v1 + " " + InetAddress.getLocalHost();
                 });
-        List<String> collect = mappedRDD.collect().subList(0, 100);
-        for (String s : collect){
-            System.out.println(s);
-        }
+//        List<String> collect = mappedRDD.collect().subList(0, 100);
+//        for (String s : collect){
+//            System.out.println(s);
+//        }
 
         JavaPairRDD<String, String> rdd = sc.wholeTextFiles("/spark_input_files/books/50430-0.txt");
-//        System.out.println(rdd.count());
+        System.out.println(rdd.count());
+
+        JavaPairRDD<String, Integer> listRDD = rdd.mapValues(s -> s.split(" ").length).cache();
+        System.out.println(listRDD.count());
+        System.out.println(listRDD.take(5));
 
         System.out.println("Took " + (System.currentTimeMillis() - start));
 

@@ -1,0 +1,25 @@
+Hi all,
+
+I have a use case scenario for parallel processing, potentially with Spark. I already have some ideas in mind, which I would like to share/discuss with you.
+
+Scenario:
+
+- 1TB dataset
+- the dataset is stored in thousands of small binary files, indexed by folders (example: by year)
+- the binary files have a propietary schema and, by now, each chunk differ in size (so, can't be split)
+- the application is a web application with real time analytics: performance is a main concern
+- the application is monolithic, running on single machine with 512GB RAM
+- getting into a point where we need to distribute processing
+
+My approach:
+
+- I wouldn't use HDFS because of overhead: HDFS is not suitable for lots of small files
+- I would go for Spark standalone with access to local file system: the dataset would be copied equally into each machine
+- the driver would never stop and would keep accepting jobs in different threads, using fair scheduling: this way I can keep broadcast data always loaded and reduce warm-up overhead
+- in the first phase, I would go for a 2-machine cluster: with this I expect to almost double the performance ("almost", because there will be network and load overhead)
+
+Questions:
+
+- what do you think of this approach?
+- is Spark applicable in this use case? or is it simply too much, given the size of the dataset? are there good alternatives?
+- how will Spark deal with the access to local files? how can I distribute the jobs correctly? if I call sc.textFile("/home/pedro/files_2016/*", "/home/pedro/files_2017/*"), will Spark distribute evenly through the cluster machines?

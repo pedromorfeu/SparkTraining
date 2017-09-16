@@ -50,7 +50,7 @@ public class SparkPool {
 
                 JavaRDD<String> rdd = sc.textFile(file);
                 JavaPairRDD<Object, Object> counts = rdd
-                        .flatMap(s -> Arrays.asList(s.split("\\s+")).iterator())
+                        .flatMap(s -> Arrays.asList(s.split("\\s+")))
                         .mapToPair(s -> new Tuple2(s, 1))
                         .reduceByKey((o, o2) -> (Integer) o + (Integer) o2);
                 List<Tuple2<Object, Object>> take = counts.take(10);
